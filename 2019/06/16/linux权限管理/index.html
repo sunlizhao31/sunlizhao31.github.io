@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="权限管理1文件的基本权限1.1基础权限 root拥有最高权限  1-rw-r--r-- 1 root root 1548 May  7 00:18 /etc/passwd     - rw- r– r– root root time filename    文件类型 拥有者权限 所属组权限 其他人的权限 拥有者 属组 最后修改时间 对象   其中文件类型|文件类型|解释||-|-||p|管道文件|">
+<meta name="keywords" content="权限管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux软件管理">
+<meta property="og:url" content="https://www.cnblogs.com/inmeditation/2019/06/16/linux权限管理/index.html">
+<meta property="og:site_name" content="INMEDITATION">
+<meta property="og:description" content="权限管理1文件的基本权限1.1基础权限 root拥有最高权限  1-rw-r--r-- 1 root root 1548 May  7 00:18 /etc/passwd     - rw- r– r– root root time filename    文件类型 拥有者权限 所属组权限 其他人的权限 拥有者 属组 最后修改时间 对象   其中文件类型|文件类型|解释||-|-||p|管道文件|">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-27T12:56:53.736Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux软件管理">
+<meta name="twitter:description" content="权限管理1文件的基本权限1.1基础权限 root拥有最高权限  1-rw-r--r-- 1 root root 1548 May  7 00:18 /etc/passwd     - rw- r– r– root root time filename    文件类型 拥有者权限 所属组权限 其他人的权限 拥有者 属组 最后修改时间 对象   其中文件类型|文件类型|解释||-|-||p|管道文件|">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://www.cnblogs.com/inmeditation/2019/06/16/linux权限管理/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>linux软件管理 | INMEDITATION</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">INMEDITATION</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.cnblogs.com/inmeditation/2019/06/16/linux权限管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sunlizhao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="INMEDITATION">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linux软件管理
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-16 00:13:29" itemprop="dateCreated datePublished" datetime="2019-06-16T00:13:29+08:00">2019-06-16</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-27 20:56:53" itemprop="dateModified" datetime="2019-06-27T20:56:53+08:00">2019-06-27</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/linux基础/" itemprop="url" rel="index"><span itemprop="name">linux基础</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/06/16/linux权限管理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/16/linux权限管理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h1><h2 id="1文件的基本权限"><a href="#1文件的基本权限" class="headerlink" title="1文件的基本权限"></a>1文件的基本权限</h2><h3 id="1-1基础权限"><a href="#1-1基础权限" class="headerlink" title="1.1基础权限"></a>1.1基础权限</h3><blockquote>
+<p>root拥有最高权限</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-rw-r--r-- 1 root root 1548 May  7 00:18 /etc/passwd</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>rw-</th>
+<th>r–</th>
+<th>r–</th>
+<th>root</th>
+<th>root</th>
+<th>time</th>
+<th>filename</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文件类型</td>
+<td>拥有者权限</td>
+<td>所属组权限</td>
+<td>其他人的权限</td>
+<td>拥有者</td>
+<td>属组</td>
+<td>最后修改时间</td>
+<td>对象</td>
+</tr>
+</tbody></table>
+<p>其中文件类型<br>|文件类型|解释|<br>|-|-|<br>|p|管道文件|<br>|d|目录|<br>|l|链接文件|<br>|-|普通文件|<br>|s|socket套接口文件.比如我们启用mysql时,会产生一个mysql.sock文件|<br>|c|表示字符设备文件|<br>|b|表示块设备文件|</p>
+<p>权限<br>| 权限 | 对文件来说 | 对目录来说 |<br>| - | - | - |<br>|r|读|读(看目录里面有什么)|<br>|w|写|在目录里面操作文件|<br>|x|执行|进入目录|</p>
+<p>常用的几种文件权限组成<br>|权限|说明|<br>|-|-|<br>| -rwx — — | 文件所有者对文件具有读取,写入和执行的权限|<br>| -rw- r– r– | 文件所有者具有读,写的权限,用户组里用户和其他用户具有读取的权限|<br>| -rw- rw- r-x | 文件所有者和同组里用户对文件具有读写的权限,其他用户仅具有读取和执行的权限|<br>| drwx –x –x | 目录所有者具有读写和进入目录的权限,其他用户仅能进入该目录,却无法读取任何数据|<br>| drwx — — | 除了目录所有者具有完整权限外,其他用户对该目录完全没有任何权限|</p>
+<h4 id="更改文件的属主和属组"><a href="#更改文件的属主和属组" class="headerlink" title="更改文件的属主和属组"></a>更改文件的属主和属组</h4><ul>
+<li>chown 用来改变文件或者目录的属主</li>
+<li>chgrp 可以用来改变文件或目录的默认属组(不常用)</li>
+<li>参数-R,递归修改目录下的所有文件,修改目录时用</li>
+</ul>
+<p>更改属主<br>chown user filename<br>更改属主和属组<br>chown user:group filename<br>更改属组<br>chown :group filename</p>
+<p>例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation sunlizhao]# ll</span><br><span class="line">total 0</span><br><span class="line">-rw-rw-r-- 1 sunlizhao sunlizhao 0 Jun 24 21:49 test.sh</span><br></pre></td></tr></table></figure>
+
+<p>更改属主</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation sunlizhao]# chown root test.sh </span><br><span class="line">[root@meditation sunlizhao]# ll</span><br><span class="line">total 0</span><br><span class="line">-rw-rw-r-- 1 root sunlizhao 0 Jun 24 21:49 test.sh</span><br></pre></td></tr></table></figure>
+
+<p>更改属主和属组</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation sunlizhao]# chown sunlizhao:root test.sh </span><br><span class="line">[root@meditation sunlizhao]# ll test.sh </span><br><span class="line">-rw-rw-r-- 1 sunlizhao root 0 Jun 24 21:49 test.sh</span><br></pre></td></tr></table></figure>
+
+<p>更改属组</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation sunlizhao]# chown :sunlizhao test.sh </span><br><span class="line">[root@meditation sunlizhao]# ll test.sh </span><br><span class="line">-rw-rw-r-- 1 sunlizhao sunlizhao 0 Jun 24 21:49 test.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="一个文件只有读的权限-拥有者可以修改这个文件吗"><a href="#一个文件只有读的权限-拥有者可以修改这个文件吗" class="headerlink" title="一个文件只有读的权限,拥有者可以修改这个文件吗?"></a>一个文件只有读的权限,拥有者可以修改这个文件吗?</h4><p>文件所有者一定可以写文件<br>1切换到属主,查看权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation sunlizhao]# su sunlizhao</span><br><span class="line">[sunlizhao@meditation ~]$ ll</span><br><span class="line">total 0</span><br><span class="line">-r--r--r-- 1 sunlizhao sunlizhao 0 Jun 24 21:49 test.sh</span><br></pre></td></tr></table></figure>
+
+<p>2发现没有权限,尝试使用vim进行写如内容:qqq.并强制保存退出:wq!</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[sunlizhao@meditation ~]$ cat test.sh </span><br><span class="line">[sunlizhao@meditation ~]$ vim test.sh </span><br><span class="line">[sunlizhao@meditation ~]$ cat test.sh </span><br><span class="line">qqq</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改文件-目录的权限"><a href="#修改文件-目录的权限" class="headerlink" title="修改文件,目录的权限"></a>修改文件,目录的权限</h4><p>语法:chmod [对谁操作] [操作符] [赋予什么权限] 文件名</p>
+<table>
+<thead>
+<tr>
+<th>对谁操作</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>u</td>
+<td>用户user,表示文件或目录的所有者</td>
+</tr>
+<tr>
+<td>g</td>
+<td>用户组group,表示文件或目录的所属用户组</td>
+</tr>
+<tr>
+<td>o</td>
+<td>其他用户others</td>
+</tr>
+<tr>
+<td>a</td>
+<td>所有用户</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>作符号</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>+</td>
+<td>添加权限</td>
+</tr>
+<tr>
+<td>-</td>
+<td>减少权限</td>
+</tr>
+<tr>
+<td>=</td>
+<td>直接给定一个权限</td>
+</tr>
+</tbody></table>
+<p>例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation sunlizhao]# ll</span><br><span class="line">total 4</span><br><span class="line">-r--r--r-- 1 sunlizhao sunlizhao 4 Jun 24 22:15 test.sh</span><br></pre></td></tr></table></figure>
+
+<p>赋予文件的所有者和所属组只有读和写权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation sunlizhao]# chmod ug=rw test.sh </span><br><span class="line">[root@meditation sunlizhao]# ll</span><br><span class="line">total 4</span><br><span class="line">-rw-rw-r-- 1 sunlizhao sunlizhao 4 Jun 24 22:15 test.sh</span><br></pre></td></tr></table></figure>
+
+<p>赋予文件其他用户执行权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation sunlizhao]# chmod o+x test.sh </span><br><span class="line">[root@meditation sunlizhao]# ll</span><br><span class="line">total 4</span><br><span class="line">-rw-rw-r-x 1 sunlizhao sunlizhao 4 Jun 24 22:15 test.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="八进制修改权限"><a href="#八进制修改权限" class="headerlink" title="八进制修改权限"></a>八进制修改权限</h4><table>
+<thead>
+<tr>
+<th>权限</th>
+<th>二进制</th>
+<th>八进制</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>—</td>
+<td>000</td>
+<td>0</td>
+<td>没有任何权限</td>
+</tr>
+<tr>
+<td>–x</td>
+<td>001</td>
+<td>1</td>
+<td>只有执行权限</td>
+</tr>
+<tr>
+<td>-w-</td>
+<td>010</td>
+<td>2</td>
+<td>只有写入权限</td>
+</tr>
+<tr>
+<td>-wx</td>
+<td>011</td>
+<td>3</td>
+<td>有执行和写入权限</td>
+</tr>
+<tr>
+<td>r–</td>
+<td>100</td>
+<td>4</td>
+<td>只有读取权限</td>
+</tr>
+<tr>
+<td>r-x</td>
+<td>101</td>
+<td>5</td>
+<td>有读取和执行权限</td>
+</tr>
+<tr>
+<td>rw-</td>
+<td>110</td>
+<td>6</td>
+<td>有读取和写入权限</td>
+</tr>
+<tr>
+<td>rwx</td>
+<td>111</td>
+<td>7</td>
+<td>有全部权限</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>rwx的权限分别是4,2,1 .使用计算后的数值. 比如rwxr-x–x用751来表示</p>
+</blockquote>
+<h3 id="1-2补码"><a href="#1-2补码" class="headerlink" title="1.2补码"></a>1.2补码</h3><blockquote>
+<p>为什么我们创建的文件的权限默认是644呢?<br>我们创建文件的默认权限是怎么来的呢</p>
+</blockquote>
+<p>umask命令允许设定文件创建时的缺省模式</p>
+<h4 id="永久更改"><a href="#永久更改" class="headerlink" title="永久更改:"></a>永久更改:</h4><p>修改配置文件中的umask值</p>
+<ul>
+<li>/etc/profile</li>
+<li>~/.bash_profile</li>
+<li>~/.profile</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation ~]# vim /etc/profile</span><br><span class="line"></span><br><span class="line"> if [ $UID -gt 199 ] &amp;&amp; [ &quot;`/usr/bin/id -gn`&quot; = &quot;`/usr/bin/id -un`&quot; ]; then</span><br><span class="line">      umask 002</span><br><span class="line">  else</span><br><span class="line">      umask 022</span><br><span class="line">  fi</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>UID大于199且用户的组名和用户名一样,那么umask值为002,否则为022<br>普通用户一般umask值为022</p>
+</blockquote>
+<h4 id="计算方法"><a href="#计算方法" class="headerlink" title="计算方法"></a>计算方法</h4><ul>
+<li>文件默认权限是666</li>
+<li>目录默认权限是777</li>
+<li>666-022=644</li>
+<li>777-022=755<blockquote>
+<p>这是一个好的记忆方法,但是不严谨.设置为033就会出错</p>
+</blockquote>
+</li>
+</ul>
+<p>正确的计算方法是<br>1, 将默认权限(目录777,文件666)和umask值都转换为2进制<br>2, 对umask取反<br>3, 将默认权限和umask取反后的值  做与运算<br>4,将得到的二进制再转换为8进制,即为权限</p>
+<p>例子:umask为033</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">文件默认权限666的二进制为110 110 110       #1转换2进制</span><br><span class="line">umask值为033的二进制为000 011 011</span><br><span class="line">umask值得二进制取反为111 100 100           #2umask二进制后取反</span><br><span class="line">110 110 110 和 111 100 100做与运算得到110 101 101    #3 与运算</span><br><span class="line"></span><br><span class="line">110 101 101                          #4转成8进制,得到权限</span><br><span class="line">6 4 4</span><br></pre></td></tr></table></figure>
+
+<h4 id="临时配置"><a href="#临时配置" class="headerlink" title="临时配置"></a>临时配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation ~]# umask 044</span><br><span class="line">[root@meditation ~]# touch text.sh</span><br><span class="line">[root@meditation ~]# mkdir text</span><br><span class="line">[root@meditation ~]# ll text.sh -d text</span><br><span class="line">drwx-wx-wx 2 root root 4096 Jun 24 23:42 text</span><br><span class="line">-rw--w--w- 1 root root    0 Jun 24 23:41 text.sh</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>666-044=622<br>777-044=533</p>
+</blockquote>
+<h2 id="2特殊权限"><a href="#2特殊权限" class="headerlink" title="2特殊权限"></a>2特殊权限</h2><p>文件的特殊权限<br>|suid | sgid | sticky |<br>|-|-|-|<br>|u+s|g+s|o+t|</p>
+<h4 id="SUID"><a href="#SUID" class="headerlink" title="SUID"></a>SUID</h4><p>只能设置在二进制可执行程序上面.对目录设置无效<br>功能:程序运行时的权限从执行者变更为 程序所有者的权限<br>例子</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation ~]# which passwd</span><br><span class="line">/usr/bin/passwd</span><br><span class="line">[root@meditation ~]# ll /usr/bin/passwd </span><br><span class="line">-rwsr-xr-x. 1 root root 27832 Jun 10  2014 /usr/bin/passwd</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>SUID属性一般用在可执行文件上,当用户执行该文件时,会临时拥有该执行文件的所有者权限<br>当我们使用passwd时,会获得所有者root的权限<br>比如普通用户用passwd修改密码.其实根本没有权限去修改/etc/shadow文件.也是在使用passwd修改时,获得的权限</p>
+</blockquote>
+<p>例:为less增加权限,可以在普通用户下执行获得所有者root的权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[sunlizhao@meditation ~]$ less /etc/shadow</span><br><span class="line">/etc/shadow: Permission denied</span><br><span class="line">[sunlizhao@meditation ~]$ su root</span><br><span class="line">Password: </span><br><span class="line">[root@meditation sunlizhao]# chmod u+s /usr/bin/less</span><br><span class="line">[root@meditation sunlizhao]# su - sunlizhao</span><br><span class="line">Last login: Tue Jun 25 00:34:59 CST 2019 on pts/0</span><br><span class="line">[sunlizhao@meditation ~]$ less /etc/shadow</span><br><span class="line">sunlizhao:$1$ovE1KmR/$VjboKPTHp83/K5q8UqdgF.:18022:0:99999:7:::</span><br></pre></td></tr></table></figure>
+
+<h4 id="SGID"><a href="#SGID" class="headerlink" title="SGID"></a>SGID</h4><p>即可以给二进制可执行程序设置,也可以给目录设置<br>功能,在设置了SGID权限的目录下简历文件时,新创建的文件的所属组会继承上级目录的权限</p>
+<p>例:为目录设置SGID权限后,更改GID.在目录下创建文件,发现GID继承上级目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation sunlizhao]# mkdir test10</span><br><span class="line">[root@meditation sunlizhao]# chmod g+s test10/</span><br><span class="line">[root@meditation sunlizhao]# chown :bin test10/</span><br><span class="line">[root@meditation sunlizhao]# ll -d test10/</span><br><span class="line">drwxr-sr-x 2 root bin 4096 Jun 25 00:45 test10/</span><br><span class="line"></span><br><span class="line">[root@meditation sunlizhao]# touch ./test10/test.sh</span><br><span class="line">[root@meditation sunlizhao]# ll ./test10/test.sh </span><br><span class="line">-rw-r--r-- 1 root bin 0 Jun 25 00:48 ./test10/test.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="sticky"><a href="#sticky" class="headerlink" title="sticky"></a>sticky</h4><p>只作用于目录<br>功能: 目录下创建的文件只有root,文件创建者,目录所有者才能删除 </p>
+<h4 id="文件扩展权限ACL"><a href="#文件扩展权限ACL" class="headerlink" title="文件扩展权限ACL"></a>文件扩展权限ACL</h4><p>例:设置用户sunlizhao对文件test.sht拥有rwx权限,sunlizhao用户不属于test.sh的所属主和组,又不想给other提权,该怎么做</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation ~]# setfacl -m u:sunlizhao:rwx /tmp/test.sh </span><br><span class="line">[root@meditation ~]#</span><br></pre></td></tr></table></figure>
+
+<p>例2给目录加扩展权限(默认可以,不加d也可以)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation ~]# mkdir /tmp/test</span><br><span class="line">[root@meditation ~]# setfacl -m d:u:sunlizhao:rwx /tmp/test </span><br><span class="line">[root@meditation ~]#</span><br></pre></td></tr></table></figure>
+
+<p>例3给目录下所有文件增加扩展权限<br>[root@meditation ~]# setfacl -R -m u:sunlizhao:rwx /tmp/test<br>[root@meditation ~]# </p>
+<p>去掉所有ACL权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@meditation tmp]# ll</span><br><span class="line">drwxrwxr-x+ 2 root root 4096 Jun 25 01:21 test</span><br><span class="line">-rw-rwxr--+ 1 root root    5 Jun 25 01:18 test.sh</span><br><span class="line"></span><br><span class="line">[root@meditation tmp]# setfacl -b /tmp/test.sh </span><br><span class="line">[root@meditation tmp]# setfacl -b /tmp/test</span><br><span class="line"></span><br><span class="line">[root@meditation tmp]# ll</span><br><span class="line">drwxr-xr-x 2 root root 4096 Jun 25 01:21 test</span><br><span class="line">-rw-r--r-- 1 root root    5 Jun 25 01:18 test.sh</span><br></pre></td></tr></table></figure>
+
+<h2 id="3创建一个root无法删除的文件"><a href="#3创建一个root无法删除的文件" class="headerlink" title="3创建一个root无法删除的文件"></a>3创建一个root无法删除的文件</h2><blockquote>
+<p>centos6开始有的</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">chattr [选项] 文件</span><br><span class="line">选项</span><br><span class="line">+a 只能追加内容</span><br><span class="line">+i 系统不允许对这个文件进行任何的修改,如果是目录,那么只能修改目录下的文件,不允许建立和删除文件</span><br><span class="line">-a  取消a</span><br><span class="line">-i  取消i</span><br><span class="line"></span><br><span class="line">lsattr 查看</span><br></pre></td></tr></table></figure>
+
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.png" alt="sunlizhao 微信">
+        <p>微信</p>
+      </div>
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/alipay.png" alt="sunlizhao 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/权限管理/" rel="tag"># 权限管理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/16/通过git+hexo+github搭建个人站点/" rel="next" title="通过git+hexo+github搭建个人站点">
+                <i class="fa fa-chevron-left"></i> 通过git+hexo+github搭建个人站点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/16/linux软件管理/" rel="prev" title="linux软件管理">
+                linux软件管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="sunlizhao">
+            
+              <p class="site-author-name" itemprop="name">sunlizhao</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.baidu.com/" title="百度 &rarr; https://www.baidu.com/" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>百度</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.cnblogs.com/" title="博客园 &rarr; https://www.cnblogs.com/"><i class="fa fa-fw fa-globe"></i>博客园</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.csdn.net/" title="CSDN &rarr; https://www.csdn.net/" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/minisnake.cn/" title="李鑫snake &rarr; minisnake.cn/"><i class="fa fa-fw fa-globe"></i>李鑫snake</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#权限管理"><span class="nav-number">1.</span> <span class="nav-text">权限管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1文件的基本权限"><span class="nav-number">1.1.</span> <span class="nav-text">1文件的基本权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1基础权限"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1基础权限</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#更改文件的属主和属组"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">更改文件的属主和属组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一个文件只有读的权限-拥有者可以修改这个文件吗"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">一个文件只有读的权限,拥有者可以修改这个文件吗?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改文件-目录的权限"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">修改文件,目录的权限</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#八进制修改权限"><span class="nav-number">1.1.1.4.</span> <span class="nav-text">八进制修改权限</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2补码"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2补码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#永久更改"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">永久更改:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#计算方法"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">计算方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#临时配置"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">临时配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2特殊权限"><span class="nav-number">1.2.</span> <span class="nav-text">2特殊权限</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SUID"><span class="nav-number">1.2.0.1.</span> <span class="nav-text">SUID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SGID"><span class="nav-number">1.2.0.2.</span> <span class="nav-text">SGID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sticky"><span class="nav-number">1.2.0.3.</span> <span class="nav-text">sticky</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件扩展权限ACL"><span class="nav-number">1.2.0.4.</span> <span class="nav-text">文件扩展权限ACL</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3创建一个root无法删除的文件"><span class="nav-number">1.3.</span> <span class="nav-text">3创建一个root无法删除的文件</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sunlizhao</span>
+
+  
+
+  
+</div>
+<!--
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+ 
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+   -->
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://www.cnblogs.com/inmeditation/2019/06/16/linux权限管理/";
+    this.page.identifier = "2019/06/16/linux权限管理/";
+    this.page.title = 'linux软件管理';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
