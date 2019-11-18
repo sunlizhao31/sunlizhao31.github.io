@@ -96,23 +96,18 @@
 
 
 
-  <meta name="description" content="用户与组 用户一般来说是指使用计算机的人,用户可以使用名称来登录计算机.除了人之外,一些系统服务器也需要含有部分特权的用户账户运行.因此出于安全考虑,用户管理应运而生,加以明确限制各个用户账户的权利.root在计算机中拥有至高权限,所以一般只作管理用,非特权用户可以通过SU或者SUDO程序来临时获得特权     用户类型 解释 UID    超级用户 root UID=0   普通用户 1系统用户">
-<meta name="keywords" content="用户管理">
+  <meta name="description" content="1初始xfs centos选择xfs格式作为默认文件系统，不再使用ext，但是仍然支持ext4提供xfsdump和xfsrestore工具xfs使用时，不需要卸载。 类似热备功能。支持断点续传  ####概念补充  完全备份：每次都把制定的本分目录完整的复制一遍增量本分：每次将之前做过的备份之后有变化的文件进行备份差异备份：每次将第一次完整备份以来有变化的文件进行备份  xfsdump的备份级别有">
+<meta name="keywords" content="xfs文件系统">
 <meta property="og:type" content="article">
-<meta property="og:title" content="linux用户管理">
-<meta property="og:url" content="https://www.cnblogs.com/inmeditation/2019/06/16/linux用户管理/index.html">
+<meta property="og:title" content="xfs文件系统备份">
+<meta property="og:url" content="https://www.cnblogs.com/inmeditation/2019/07/07/linux-xfs文件系统备份/index.html">
 <meta property="og:site_name" content="INMEDITATION">
-<meta property="og:description" content="用户与组 用户一般来说是指使用计算机的人,用户可以使用名称来登录计算机.除了人之外,一些系统服务器也需要含有部分特权的用户账户运行.因此出于安全考虑,用户管理应运而生,加以明确限制各个用户账户的权利.root在计算机中拥有至高权限,所以一般只作管理用,非特权用户可以通过SU或者SUDO程序来临时获得特权     用户类型 解释 UID    超级用户 root UID=0   普通用户 1系统用户">
+<meta property="og:description" content="1初始xfs centos选择xfs格式作为默认文件系统，不再使用ext，但是仍然支持ext4提供xfsdump和xfsrestore工具xfs使用时，不需要卸载。 类似热备功能。支持断点续传  ####概念补充  完全备份：每次都把制定的本分目录完整的复制一遍增量本分：每次将之前做过的备份之后有变化的文件进行备份差异备份：每次将第一次完整备份以来有变化的文件进行备份  xfsdump的备份级别有">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="en-resource://database/431:1">
-<meta property="og:image" content="en-resource://database/432:1">
-<meta property="og:image" content="en-resource://database/430:1">
-<meta property="og:image" content="en-resource://database/433:1">
-<meta property="og:updated_time" content="2019-06-27T12:53:26.528Z">
+<meta property="og:updated_time" content="2019-07-07T14:14:07.860Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="linux用户管理">
-<meta name="twitter:description" content="用户与组 用户一般来说是指使用计算机的人,用户可以使用名称来登录计算机.除了人之外,一些系统服务器也需要含有部分特权的用户账户运行.因此出于安全考虑,用户管理应运而生,加以明确限制各个用户账户的权利.root在计算机中拥有至高权限,所以一般只作管理用,非特权用户可以通过SU或者SUDO程序来临时获得特权     用户类型 解释 UID    超级用户 root UID=0   普通用户 1系统用户">
-<meta name="twitter:image" content="en-resource://database/431:1">
+<meta name="twitter:title" content="xfs文件系统备份">
+<meta name="twitter:description" content="1初始xfs centos选择xfs格式作为默认文件系统，不再使用ext，但是仍然支持ext4提供xfsdump和xfsrestore工具xfs使用时，不需要卸载。 类似热备功能。支持断点续传  ####概念补充  完全备份：每次都把制定的本分目录完整的复制一遍增量本分：每次将之前做过的备份之后有变化的文件进行备份差异备份：每次将第一次完整备份以来有变化的文件进行备份  xfsdump的备份级别有">
 
 
 
@@ -120,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="https://www.cnblogs.com/inmeditation/2019/06/16/linux用户管理/">
+  <link rel="canonical" href="https://www.cnblogs.com/inmeditation/2019/07/07/linux-xfs文件系统备份/">
 
 
 
@@ -130,7 +125,7 @@
   };
 </script>
 
-  <title>linux用户管理 | INMEDITATION</title>
+  <title>xfs文件系统备份 | INMEDITATION</title>
   
 
 
@@ -358,7 +353,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://www.cnblogs.com/inmeditation/2019/06/16/linux用户管理/">
+    <link itemprop="mainEntityOfPage" href="https://www.cnblogs.com/inmeditation/2019/07/07/linux-xfs文件系统备份/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="sunlizhao">
@@ -375,7 +370,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">linux用户管理
+          <h1 class="post-title" itemprop="name headline">xfs文件系统备份
 
               
             
@@ -401,24 +396,12 @@
                 
               
 
-              <time title="创建时间：2019-06-16 00:13:29" itemprop="dateCreated datePublished" datetime="2019-06-16T00:13:29+08:00">2019-06-16</time>
+              <time title="创建时间：2019-07-07 00:13:29 / 修改时间：22:14:07" itemprop="dateCreated datePublished" datetime="2019-07-07T00:13:29+08:00">2019-07-07</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-06-27 20:53:26" itemprop="dateModified" datetime="2019-06-27T20:53:26+08:00">2019-06-27</time>
               
             
           </span>
@@ -454,8 +437,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/06/16/linux用户管理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/06/16/linux用户管理/" itemprop="commentCount"></span>
+                <a href="/2019/07/07/linux-xfs文件系统备份/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/07/07/linux-xfs文件系统备份/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -490,123 +473,51 @@
       
 
       
-        <h2 id="用户与组"><a href="#用户与组" class="headerlink" title="用户与组"></a>用户与组</h2><blockquote>
-<p>用户一般来说是指使用计算机的人,用户可以使用名称来登录计算机.除了人之外,一些系统服务器也需要含有部分特权的用户账户运行.<br>因此出于安全考虑,用户管理应运而生,加以明确限制各个用户账户的权利.<br>root在计算机中拥有至高权限,所以一般只作管理用,非特权用户可以通过SU或者SUDO程序来临时获得特权</p>
+        <h3 id="1初始xfs"><a href="#1初始xfs" class="headerlink" title="1初始xfs"></a>1初始xfs</h3><blockquote>
+<p>centos选择xfs格式作为默认文件系统，不再使用ext，但是仍然支持ext4<br>提供xfsdump和xfsrestore工具<br>xfs使用时，不需要卸载。 类似热备功能。支持断点续传</p>
 </blockquote>
-<table>
-<thead>
-<tr>
-<th>用户类型</th>
-<th>解释</th>
-<th>UID</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>超级用户</td>
-<td>root</td>
-<td>UID=0</td>
-</tr>
-<tr>
-<td>普通用户</td>
-<td>1系统用户</td>
-<td>centos6UID:1-499 ; centos7UID:1-999</td>
-</tr>
-<tr>
-<td></td>
-<td>2本地用户</td>
-<td>centos6UID:500+ ; centos7UID:1000+</td>
-</tr>
-<tr>
-<td>虚拟用户</td>
-<td>伪用户</td>
-<td>一般不会用来的登录系统,主要用于维持某个服务的正常运行</td>
-</tr>
-</tbody></table>
-<h4 id="UID-每个用户的身份标识-类似于人的身份证号码"><a href="#UID-每个用户的身份标识-类似于人的身份证号码" class="headerlink" title="UID:每个用户的身份标识,类似于人的身份证号码"></a>UID:每个用户的身份标识,类似于人的身份证号码</h4><p><strong>用户和组的关系</strong></p>
-<ul>
-<li>一对一</li>
-<li>一对多</li>
-<li>多对一</li>
-<li>多对多</li>
-</ul>
-<h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><table>
-<thead>
-<tr>
-<th>配置文件</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>/etc/passwd</td>
-<td>用户配置文件.记录每个用户的基本信息,并且对所有用户可读,每一行记录对应一个用户,每行记录通过冒号分隔</td>
-</tr>
-<tr>
-<td>/etc/group</td>
-<td>用户组文件.用户组的所有信息存放地,组名不能重复</td>
-</tr>
-<tr>
-<td>/etc/shadow</td>
-<td>用户对应的密码信息,因为passwd文件对所有用户都是可读的,为安全起见,把密码从passwd中分离出来放入这个单独的文件,该文件只有可读权限,从而保证密码安全性</td>
-</tr>
-</tbody></table>
-<p><strong>/etc/passwd</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat /etc/passwd</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">bin:x:1:1:bin:/bin:/sbin/nologin</span><br><span class="line">daemon:x:2:2:daemon:/sbin:/sbin/nologin</span><br><span class="line">adm:x:3:4:adm:/var/adm:/sbin/nologin</span><br><span class="line">lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin</span><br><span class="line">sync:x:5:0:sync:/sbin:/bin/sync</span><br><span class="line">shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown</span><br><span class="line">halt:x:7:0:halt:/sbin:/sbin/halt</span><br><span class="line">mail:x:8:12:mail:/var/spool/mail:/sbin/nologin</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">每个字段解释</span><br><span class="line">用户名;密码占位符;UID;GID;用户描述;用户主目录;登录后使用的shell</span><br></pre></td></tr></table></figure>
-
-<p><strong>/etc/group</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat /etc/group</span><br><span class="line">root:x:0:</span><br><span class="line">bin:x:1:</span><br><span class="line">daemon:x:2:</span><br><span class="line">sys:x:3:</span><br><span class="line">adm:x:4:</span><br><span class="line">tty:x:5:</span><br><span class="line">disk:x:6:</span><br><span class="line">lp:x:7:</span><br><span class="line">mem:x:8:</span><br><span class="line">kmem:x:9:</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">字段解释</span><br><span class="line">组名:x:GID:(当前组中的用户)</span><br></pre></td></tr></table></figure>
-
-<p><strong>/etc/shadow</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# cat /etc/shadow</span><br><span class="line">root:$6$8DLTLutUGU6/s0BC$O/oTIS6Jo5pBHOfouJRC8ph.x/KDZh2HDibV6Py.VCD7rNxsVz8nEi7rK3UFrZrE1fVw5MFLTZeoqDS48D.QM0::0:99999:7:::</span><br><span class="line">bin:*:17834:0:99999:7:::</span><br><span class="line">daemon:*:17834:0:99999:7:::</span><br><span class="line">adm:*:17834:0:99999:7:::</span><br><span class="line">lp:*:17834:0:99999:7:::</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">参数解释:</span><br><span class="line">用户名;</span><br><span class="line">被加密后的密码;</span><br><span class="line">最近更改密码的日期,从19700101开始计算,69年UNIN出现的,1970/1/1/开始计算;</span><br><span class="line">密码不能更改的天数,0表示随时可以更改;</span><br><span class="line">密码过期时间,多少天后必须更改;</span><br><span class="line">密码需要更改的前七天发出警告;</span><br><span class="line">宽限天数,密码过了几天后还能更改密码;</span><br><span class="line">账号过期时间;</span><br><span class="line">保留;</span><br><span class="line"></span><br><span class="line">密码加密.分为三个部分</span><br><span class="line">第一部分表示使用哪种哈希算法</span><br><span class="line">        $1表示MD5,$6表示SHA-512  $5表示SHA-256</span><br><span class="line">第二部分用于加密哈希的salt</span><br><span class="line">第三部分是已加密的哈希</span><br></pre></td></tr></table></figure>
-
-<h2 id="用户管理命令"><a href="#用户管理命令" class="headerlink" title="用户管理命令"></a>用户管理命令</h2><h4 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h4><p><code>useradd -u &quot;UID&quot; -g &quot;初始组&quot; -G &quot;附加组&quot; -s &quot;登录的shell&quot; 用户</code></p>
-<p><strong>1添加harry用户</strong></p>
+<p>####概念补充</p>
 <blockquote>
-<p>此命令会自动创建harry组,并成为该用户的主组,同时默认登录的shell是bash</p>
+<p>完全备份：每次都把制定的本分目录完整的复制一遍<br>增量本分：每次将之前做过的备份之后有变化的文件进行备份<br>差异备份：每次将第一次完整备份以来有变化的文件进行备份</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# useradd harry</span><br><span class="line">[root@localhost ~]# tail -1 /etc/passwd</span><br><span class="line">harry:x:1000:1000::/home/harry:/bin/bash</span><br><span class="line">[root@localhost ~]# id harry</span><br><span class="line">uid=1000(harry) gid=1000(harry) groups=1000(harry)</span><br></pre></td></tr></table></figure>
-
-<p><strong>2创建harry1用户,指定UID为1100</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# useradd -u 1100 harry1</span><br><span class="line">[root@localhost ~]# id harry1</span><br><span class="line">uid=1100(harry1) gid=1100(harry1) groups=1100(harry1)</span><br></pre></td></tr></table></figure>
-
-<p><strong>3创建harry2用户,指定家目录</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# useradd -d /opt/harry2 harry2</span><br><span class="line">[root@localhost ~]# ls /opt/</span><br><span class="line">harry2</span><br><span class="line">[root@localhost ~]# id harry2</span><br><span class="line">uid=1101(harry2) gid=1101(harry2) groups=1101(harry2)</span><br></pre></td></tr></table></figure>
-
-<p><strong>4创建harry3用户,不创建家目录</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# useradd -M harry3</span><br><span class="line">[root@localhost ~]# ls /home/</span><br><span class="line">harry  harry1</span><br><span class="line">[root@localhost ~]# id harry3</span><br><span class="line">uid=1102(harry3) gid=1102(harry3) groups=1102(harry3)</span><br></pre></td></tr></table></figure>
-
-<p><strong>5创建harry4用户,指定主组harry</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[ root@localhost ~]# useradd -g harry harry4</span><br><span class="line">[root@localhost ~]# id harry4</span><br><span class="line">uid=1103(harry4) gid=1000(harry) groups=1000(harry)</span><br></pre></td></tr></table></figure>
-
-<p><strong>6创建harry5用户,指定附属组harry,harry1</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# useradd -G harry,harry1 harry5</span><br><span class="line">[root@localhost ~]# id harry5</span><br><span class="line">uid=1104(harry5) gid=1104(harry5) groups=1104(harry5),1000(harry),1100(harry1)</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
-
-<p>创建用户的另一命令adduser,两者没有任何区别.是useradd的软链接</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# which adduser</span><br><span class="line">/usr/sbin/adduser</span><br><span class="line">[root@localhost ~]# ll /usr/sbin/adduser </span><br><span class="line">lrwxrwxrwx. 1 root root 7 Jun  1 02:55 /usr/sbin/adduser -&gt; useradd</span><br></pre></td></tr></table></figure>
-
-<h4 id="添加密码"><a href="#添加密码" class="headerlink" title="添加密码"></a>添加密码</h4><p><strong>1 passwd harry1</strong>  </p>
+<p>xfsdump的备份级别有两种</p>
 <blockquote>
-<p>交互式创建密码</p>
+<p>默认为0,0代表完全备份，<br>1-9级别代表 增量备份</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# passwd harry1</span><br><span class="line">Changing password for user harry1.</span><br><span class="line">New password: </span><br><span class="line">BAD PASSWORD: The password is shorter than 8 characters</span><br><span class="line">Retype new password: </span><br><span class="line">passwd: all authentication tokens updated successfully.</span><br></pre></td></tr></table></figure>
+<h3 id="2xfs文件系统的使用"><a href="#2xfs文件系统的使用" class="headerlink" title="2xfs文件系统的使用"></a>2xfs文件系统的使用</h3><p>1在虚拟机增加一块虚拟硬盘，开机之后会发现<br><code>ls /dev/sdb</code></p>
+<p>2对sdb分区</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fdisk /dev/sdb</span><br><span class="line">	p:查看当前分区表</span><br><span class="line">	n：新建分区</span><br><span class="line">		P：主分区</span><br><span class="line">		e：扩展分区</span><br><span class="line">		其后会选择分区号和起始扇区，一般默认即可</span><br><span class="line">		设置扇区大小，根据情况设置</span><br><span class="line">		w：保存</span><br></pre></td></tr></table></figure>
 
-<p><strong>2 echo 123456 | passwd –stdin harry1</strong></p>
+<p>3格式化<br><code>mkfs.xfs /dev/sdb1</code></p>
+<p>4创建挂载点<br><code>mkdir /sdb1</code></p>
+<p>5挂载<br><code>mount /dev/sdb1 /sdb1</code></p>
+<h3 id="3完全备份与恢复"><a href="#3完全备份与恢复" class="headerlink" title="3完全备份与恢复"></a>3完全备份与恢复</h3><p>#####1备份语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">xfsdump -f 备份存放位置 要备份路径</span><br><span class="line">xfsdump -f /opt/dump_sdb1 /dev/sdb1</span><br></pre></td></tr></table></figure>
+
 <blockquote>
-<p>免交互</p>
+<p>要备份的路径不能写成/sdb1/, 可以是/dev/sdb1 或者是 /sdb1</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# echo 123456 | passwd --stdin harry2</span><br><span class="line">Changing password for user harry2.</span><br><span class="line">passwd: all authentication tokens updated successfully.</span><br></pre></td></tr></table></figure>
-
-<h4 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h4><p><strong>userdel -r harry5</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# userdel -r harry5</span><br><span class="line">[root@localhost ~]# userdel -r harry4</span><br><span class="line">[root@localhost ~]# userdel -r harry3</span><br></pre></td></tr></table></figure>
-
-<p>选项<br><code>-r 删除的时候,会同时删除用户的家目录和/var/mail下的目录</code></p>
-<h2 id="扩展1-模板文件被删除之后显示不正常的问题"><a href="#扩展1-模板文件被删除之后显示不正常的问题" class="headerlink" title="扩展1,模板文件被删除之后显示不正常的问题"></a>扩展1,模板文件被删除之后显示不正常的问题</h2><blockquote>
-<p>shell提示符不完整</p>
+<p>接下来会提示你:<br>输入指定备份会话标签:<br><code>dump_sdb1</code><br>输入指定设备标签:<br><code>sdb1</code></p>
+<p>#####2免交互备份(方便后期定时操作)</p>
+<p><code>xfsdump -f /opt/dump_passwd /sdb1 -L dump_passwd -M sdb1</code></p>
+<p>备份时,只备份某一个目录或者文件<br><code>xfsdump -f /opt/dump_grub2 -s grub2/grub.cfg /boot -L dump_grub2 -M boot</code></p>
+<p>#####3完全备份恢复</p>
+<p>查看备份详细信息<br><code>xfsdump -I</code></p>
+<p>文件系统恢复<br><code>xfsrestore -f /opt/dump_sdb1 /sdb1</code></p>
+<p>指定文件恢复<br><code>xfsrestore -f /opt/dump_grub2 -s grub2/grub.cfg /boot</code></p>
+<h3 id="4增量备份"><a href="#4增量备份" class="headerlink" title="4增量备份"></a>4增量备份</h3><blockquote>
+<p>增量备份是指在一次全备份后，以后每次备份只需要备份与前一次相比增加或者修改的文件</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost ~]# rm -rf /home/harry1/.bash*</span><br><span class="line">[root@localhost ~]# su - harry1</span><br><span class="line">Last login: Sat Jun  1 04:53:22 CST 2019 on pts/1</span><br><span class="line">-bash-4.2$ </span><br><span class="line">-bash-4.2$ exit</span><br><span class="line">logout</span><br><span class="line">[root@localhost ~]# cp /etc/skel/.bash* /home/harry1/</span><br><span class="line">[root@localhost ~]# chown harry1:harry1 /home/harry1/.bash*</span><br><span class="line">[root@localhost ~]# su - harry1</span><br><span class="line">Last login: Sat Jun  1 04:54:15 CST 2019 on pts/1</span><br><span class="line">[harry1@localhost ~]$ exit</span><br><span class="line">logout</span><br><span class="line">[root@localhost ~]#</span><br></pre></td></tr></table></figure>
-
-<h2 id="扩展2-忘记root密码-怎样找回呢"><a href="#扩展2-忘记root密码-怎样找回呢" class="headerlink" title="扩展2,忘记root密码,怎样找回呢"></a>扩展2,忘记root密码,怎样找回呢</h2><p>1开机在选择内核的界面处,按”e”<br><img src="en-resource://database/431:1" alt="63450204237ab9f52e8bb2f34a9fd825.png"></p>
-<p>2修改ro为 rw init=/sysroot/bin/sh<br><img src="en-resource://database/432:1" alt="8f912dc0b722d0f227fe760078294365.png"><br><img src="en-resource://database/430:1" alt="620b295d6217f906fac05ba03d3ba929.png"></p>
-<p>3按ctrl+x保存:进入紧急模式<br><img src="en-resource://database/433:1" alt="feb89d6c87d55c10494c82327ceff699.png"></p>
+<p>优点</p>
+<blockquote>
+<p>没有重复的文件，所有备份时间短，不会浪费存储空间<br>缺点<br>数据恢复相对麻烦，按照全备份到依次增量备份的时间，逐个反推。</p>
+</blockquote>
+<h5 id="实战，增量备份文件系统"><a href="#实战，增量备份文件系统" class="headerlink" title="实战，增量备份文件系统"></a>实战，增量备份文件系统</h5><p>1对要备份的目录进行完全备份<br><code>xfsdump -f  /opt/test-full /sdb1 -L test-full -M sdb1</code></p>
+<p>2对/sdb1 目录下增加一些文件或者内容，然后进行第一次增量备份<br><code>xfsdump -l 1 -f /opt/test-full1 /sdb1 -L test-full1 -M sdb1</code></p>
+<p>3继续对sdb1 目录下增加一些文件或者内容，进行第二次增量备份<br><code>xfsdump -l 2 -f /opttest-full2 /sdb1 -L test-full2 -M sdb2</code></p>
+<h5 id="删除-sdb1目录的文件之后，如何恢复呢"><a href="#删除-sdb1目录的文件之后，如何恢复呢" class="headerlink" title="删除/sdb1目录的文件之后，如何恢复呢"></a>删除/sdb1目录的文件之后，如何恢复呢</h5><p>1恢复完全备份<br><code>xfsrestore -f /opt/test-full /sdb1</code></p>
+<p>2恢复1级备份<br><code>xfsrestore -f /opt/test-full1 /sdb1</code></p>
+<p>3恢复2级备份<br><code>xfsrestore -f /opt/test-full2 /sdb2</code></p>
 
       
     </div>
@@ -666,7 +577,7 @@
         
         <div class="post-tags">
           
-            <a href="/tags/用户管理/" rel="tag"># 用户管理</a>
+            <a href="/tags/xfs文件系统/" rel="tag"># xfs文件系统</a>
           
         </div>
       
@@ -679,8 +590,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/16/linux软件管理/" rel="next" title="linux软件管理">
-                <i class="fa fa-chevron-left"></i> linux软件管理
+              <a href="/2019/07/07/linux-文件的管理和查看/" rel="next" title="文件的管理和查看">
+                <i class="fa fa-chevron-left"></i> 文件的管理和查看
               </a>
             
           </div>
@@ -689,8 +600,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/06/16/linux计划任务/" rel="prev" title="linux计划任务">
-                linux计划任务 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/09/01/mysql数据类型/" rel="prev" title="mysql数据类型">
+                mysql数据类型 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -769,7 +680,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-count">21</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -875,7 +786,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">30</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">32</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -983,7 +898,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#用户与组"><span class="nav-number">1.</span> <span class="nav-text">用户与组</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UID-每个用户的身份标识-类似于人的身份证号码"><span class="nav-number">1.0.1.</span> <span class="nav-text">UID:每个用户的身份标识,类似于人的身份证号码</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件"><span class="nav-number">2.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户管理命令"><span class="nav-number">3.</span> <span class="nav-text">用户管理命令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#添加用户"><span class="nav-number">3.0.1.</span> <span class="nav-text">添加用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加密码"><span class="nav-number">3.0.2.</span> <span class="nav-text">添加密码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除用户"><span class="nav-number">3.0.3.</span> <span class="nav-text">删除用户</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展1-模板文件被删除之后显示不正常的问题"><span class="nav-number">4.</span> <span class="nav-text">扩展1,模板文件被删除之后显示不正常的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展2-忘记root密码-怎样找回呢"><span class="nav-number">5.</span> <span class="nav-text">扩展2,忘记root密码,怎样找回呢</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1初始xfs"><span class="nav-number">1.</span> <span class="nav-text">1初始xfs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2xfs文件系统的使用"><span class="nav-number">2.</span> <span class="nav-text">2xfs文件系统的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3完全备份与恢复"><span class="nav-number">3.</span> <span class="nav-text">3完全备份与恢复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4增量备份"><span class="nav-number">4.</span> <span class="nav-text">4增量备份</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#实战，增量备份文件系统"><span class="nav-number">4.0.1.</span> <span class="nav-text">实战，增量备份文件系统</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#删除-sdb1目录的文件之后，如何恢复呢"><span class="nav-number">4.0.2.</span> <span class="nav-text">删除/sdb1目录的文件之后，如何恢复呢</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1179,9 +1094,9 @@
 
 <script>
   var disqus_config = function() {
-    this.page.url = "https://www.cnblogs.com/inmeditation/2019/06/16/linux用户管理/";
-    this.page.identifier = "2019/06/16/linux用户管理/";
-    this.page.title = 'linux用户管理';
+    this.page.url = "https://www.cnblogs.com/inmeditation/2019/07/07/linux-xfs文件系统备份/";
+    this.page.identifier = "2019/07/07/linux-xfs文件系统备份/";
+    this.page.title = 'xfs文件系统备份';
     };
   function loadComments() {
     var d = document, s = d.createElement('script');
