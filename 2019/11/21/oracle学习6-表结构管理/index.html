@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="数据类型字符串类型字符串类型用来存储字符串数据    类型名称 说明 取值范围(字节)    char 用于描述定长的字符型数据 0~2000   nchar 用来存储Unicode字符集的定长字符型数据 0~1000   varchar2 用于描述可变长的字符型数据 0~4000   nvarchar2 用来存储unicode字符集的可变长字符型数据 0~1000   long 用来存储边长的字">
+<meta name="keywords" content="oracle表管理,oracle列管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="oracle学习6-表结构管理">
+<meta property="og:url" content="https://www.cnblogs.com/inmeditation/2019/11/21/oracle学习6-表结构管理/index.html">
+<meta property="og:site_name" content="INMEDITATION">
+<meta property="og:description" content="数据类型字符串类型字符串类型用来存储字符串数据    类型名称 说明 取值范围(字节)    char 用于描述定长的字符型数据 0~2000   nchar 用来存储Unicode字符集的定长字符型数据 0~1000   varchar2 用于描述可变长的字符型数据 0~4000   nvarchar2 用来存储unicode字符集的可变长字符型数据 0~1000   long 用来存储边长的字">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-21T13:39:10.007Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="oracle学习6-表结构管理">
+<meta name="twitter:description" content="数据类型字符串类型字符串类型用来存储字符串数据    类型名称 说明 取值范围(字节)    char 用于描述定长的字符型数据 0~2000   nchar 用来存储Unicode字符集的定长字符型数据 0~1000   varchar2 用于描述可变长的字符型数据 0~4000   nvarchar2 用来存储unicode字符集的可变长字符型数据 0~1000   long 用来存储边长的字">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://www.cnblogs.com/inmeditation/2019/11/21/oracle学习6-表结构管理/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>oracle学习6-表结构管理 | INMEDITATION</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">INMEDITATION</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.cnblogs.com/inmeditation/2019/11/21/oracle学习6-表结构管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sunlizhao">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="INMEDITATION">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">oracle学习6-表结构管理
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-21 21:36:29 / 修改时间：21:39:10" itemprop="dateCreated datePublished" datetime="2019-11-21T21:36:29+08:00">2019-11-21</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/oracle/" itemprop="url" rel="index"><span itemprop="name">oracle</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/11/21/oracle学习6-表结构管理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/11/21/oracle学习6-表结构管理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><h2 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h2><p>字符串类型用来存储字符串数据</p>
+<table>
+<thead>
+<tr>
+<th>类型名称</th>
+<th>说明</th>
+<th>取值范围(字节)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>char</td>
+<td>用于描述定长的字符型数据</td>
+<td>0~2000</td>
+</tr>
+<tr>
+<td>nchar</td>
+<td>用来存储Unicode字符集的定长字符型数据</td>
+<td>0~1000</td>
+</tr>
+<tr>
+<td>varchar2</td>
+<td>用于描述可变长的字符型数据</td>
+<td>0~4000</td>
+</tr>
+<tr>
+<td>nvarchar2</td>
+<td>用来存储unicode字符集的可变长字符型数据</td>
+<td>0~1000</td>
+</tr>
+<tr>
+<td>long</td>
+<td>用来存储边长的字符串</td>
+<td>0~2GB</td>
+</tr>
+</tbody></table>
+<p>varchar2,nvarchar2和long类型都是变长类型,对于其存储需求取决于列值的实际长度,而不是取决于类型的最大可能尺寸<br>例如,varchar(10)列能保存最大长度为10个字符的一个字符串</p>
+<p>创建tmp1表,定义字段ch和vch, 数据类型依次为char(4)和varchar2(4)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create table tmp1(</span><br><span class="line">  2  ch char(4),vch varchar(4)</span><br><span class="line">  3  );</span><br><span class="line">表已创建。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; insert into tmp1 values(&apos;ab&apos;,&apos;ab&apos;);</span><br><span class="line">已创建 1 行。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; select length(ch) from tmp1</span><br><span class="line">  2  union all</span><br><span class="line">  3  select length(vch) from tmp1;</span><br><span class="line"></span><br><span class="line">LENGTH(CH)</span><br><span class="line">----------</span><br><span class="line">         4</span><br><span class="line">         2</span><br></pre></td></tr></table></figure>
+
+<p>定长字符串在存储时长度是固定的,而变长字符串的存储长度是根据实际插入的数据长度而定</p>
+<h2 id="数值类型"><a href="#数值类型" class="headerlink" title="数值类型"></a>数值类型</h2><p>oracle的数值类型主要通过number(m,n)语句来实现,格式为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">number(m,n)</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>number</td>
+<td>可变长的数值列</td>
+</tr>
+<tr>
+<td>m</td>
+<td>是所有 有效数字的位数. 取值范围为1~38</td>
+</tr>
+<tr>
+<td>n</td>
+<td>是小数点以后的位数. 取值范围为 -84~127</td>
+</tr>
+</tbody></table>
+<p>例<code>number(5,2)</code><br>这个字段的最大值是999.99, 如果数值超出了位数限制就会被截取多余的位数<br>在这个字段中插入数据575.316,则真正保存到字段中的数值是575.32</p>
+<p>例<code>number(3)</code><br>输入575.316,真正保存的数据是575,对于整数,可以省略后面的0</p>
+<h2 id="日期和时间类型"><a href="#日期和时间类型" class="headerlink" title="日期和时间类型"></a>日期和时间类型</h2><table>
+<thead>
+<tr>
+<th>类型名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>date</td>
+<td>用来存储日期和时间,精确到秒</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>用来存储日期和时间,精确到小数秒,存放日期时还能显示上午,下午和时区</td>
+</tr>
+</tbody></table>
+<p>创建表tmp2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create table tmp2(d1 date);</span><br><span class="line"></span><br><span class="line">表已创建。</span><br></pre></td></tr></table></figure>
+
+<p>插入数据之前,查看数据库默认的时间格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; select sysdate from dual;</span><br><span class="line"></span><br><span class="line">SYSDATE</span><br><span class="line">--------------</span><br><span class="line">20-11月-19</span><br></pre></td></tr></table></figure>
+
+<p>插入数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; insert into tmp2 values(&apos;20-11月-2019&apos;);</span><br><span class="line">已创建 1 行。</span><br><span class="line"></span><br><span class="line">SQL&gt; select * from tmp2;</span><br><span class="line">D1</span><br><span class="line">--------------</span><br><span class="line">20-11月-19</span><br></pre></td></tr></table></figure>
+
+<p>如果想按照指定的格式输入时间,需要修改时间的默认格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter session set nls_date_format=&apos;yyyy-mm-dd&apos;;</span><br><span class="line">会话已更改。</span><br><span class="line"></span><br><span class="line">SQL&gt; select sysdate from dual;</span><br><span class="line">SYSDATE</span><br><span class="line">----------</span><br><span class="line">2019-11-20</span><br></pre></td></tr></table></figure>
+
+<p>例:<br>创建数据表tmp3,字段d,类型date,向表中插入’YYYYMMDD’和’YYYY-MM-DD’格式日期</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create table tmp3(d1 date);</span><br><span class="line">表已创建。</span><br><span class="line"></span><br><span class="line">SQL&gt; alter session set nls_date_format=&apos;yyyy-mm-dd&apos;;</span><br><span class="line">会话已更改。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; insert into tmp3 values(&apos;1998-08-08&apos;);</span><br><span class="line">已创建 1 行。</span><br><span class="line"></span><br><span class="line">SQL&gt; insert into tmp3 values(&apos;19880808&apos;);</span><br><span class="line">已创建 1 行。</span><br><span class="line"></span><br><span class="line">SQL&gt; select * from tmp3;</span><br><span class="line">D1</span><br><span class="line">----------</span><br><span class="line">1998-08-08</span><br><span class="line">1988-08-08</span><br></pre></td></tr></table></figure>
+
+<h1 id="表管理"><a href="#表管理" class="headerlink" title="表管理"></a>表管理</h1><h2 id="新建表"><a href="#新建表" class="headerlink" title="新建表"></a>新建表</h2><p><strong>语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create table 表名</span><br><span class="line">(</span><br><span class="line">	列名1 类型(长度),</span><br><span class="line">	列名2 类型(长度),</span><br><span class="line">	列名3 类型(长度)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>create table</code>:关键字,建表 后跟新建表的表名,表名长度有限制,不超过32位,以英文单词或者缩写组成,单词之间用下划线连接</li>
+<li>表名必须是数据库中唯一的,重复会报错.</li>
+<li>列名:英文单词缩写组成,长度不超过30位,不能以数字,下划线或特殊字符开头.单词之间以下划线连接.</li>
+<li>括号后须有分号结束;</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create table stu_test</span><br><span class="line">  2  (</span><br><span class="line">  3  stu_id number(6),</span><br><span class="line">  4  stu_name varchar2(50),</span><br><span class="line">  5  stu_age number(3)</span><br><span class="line">  6  );</span><br><span class="line"></span><br><span class="line">表已创建。</span><br></pre></td></tr></table></figure>
+
+<h4 id="添加注释"><a href="#添加注释" class="headerlink" title="添加注释"></a>添加注释</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; comment on table stu_test is &apos;学生表&apos;;</span><br><span class="line">注释已创建。</span><br><span class="line"></span><br><span class="line">SQL&gt; comment on column stu_test.stu_id is &apos;学生编号&apos;;</span><br><span class="line">注释已创建。</span><br><span class="line"></span><br><span class="line">SQL&gt; comment on column stu_test.stu_name is &apos;学生姓名&apos;;</span><br><span class="line">注释已创建。</span><br><span class="line"></span><br><span class="line">SQL&gt; comment on column stu_test.stu_age is &apos;学生年龄&apos;;</span><br><span class="line">注释已创建。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>comment on table:关键字,即表的注释</li>
+<li>comment on column:关键字,列的注释</li>
+</ul>
+<h4 id="复制表"><a href="#复制表" class="headerlink" title="复制表"></a>复制表</h4><h6 id="复制表结构-不包含数据"><a href="#复制表结构-不包含数据" class="headerlink" title="复制表结构,不包含数据"></a>复制表结构,不包含数据</h6><blockquote>
+<p>复制表结构,不包含数据,也不包含索引,约束,注释</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create table stu_test1 as</span><br><span class="line">  2  select stu_id,stu_name from stu_test</span><br><span class="line">  3  where 1=2;</span><br><span class="line"></span><br><span class="line">表已创建。</span><br></pre></td></tr></table></figure>
+
+<h6 id="复制表结构-包含数据"><a href="#复制表结构-包含数据" class="headerlink" title="复制表结构,包含数据"></a>复制表结构,包含数据</h6><blockquote>
+<p>复制表结构,并包含数据,但不包括索引,约束,注释</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create table stu_test2 as</span><br><span class="line">  2  select stu_id,stu_name from stu_test</span><br><span class="line">  3  where 1=1;</span><br><span class="line"></span><br><span class="line">表已创建。</span><br></pre></td></tr></table></figure>
+
+<h2 id="新建分区表"><a href="#新建分区表" class="headerlink" title="新建分区表"></a>新建分区表</h2><ul>
+<li>分区原则:当数据量超过2000W时,可以考虑使用分区表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>分区类型</th>
+<th>类型描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>range:</td>
+<td>按照范围分区,通常是按照时间字段分区,比如申请时间,入职时间</td>
+</tr>
+<tr>
+<td>list:</td>
+<td>按照分布分区,比如身份证号码最后一位</td>
+</tr>
+<tr>
+<td>hash:</td>
+<td>按照hash值分配分区,不保证是均匀分配</td>
+</tr>
+</tbody></table>
+<h4 id="range分区范例"><a href="#range分区范例" class="headerlink" title="range分区范例"></a>range分区范例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create table emp_info</span><br><span class="line">  2  (</span><br><span class="line">  3         emp_no number(10),</span><br><span class="line">  4         join_date date</span><br><span class="line">  5  )</span><br><span class="line">  6  partition by range(join_date)</span><br><span class="line">  7  (</span><br><span class="line">  8            partition P1 values less than(to_date(&apos;20191120&apos;,&apos;YYYYMMDD&apos;)),</span><br><span class="line">  9            partition P2 values less than(to_date(&apos;20191121&apos;,&apos;YYYYMMDD&apos;)),</span><br><span class="line"> 10            partition P3 values less than(to_date(&apos;20191122&apos;,&apos;YYYYMMDD&apos;)),</span><br><span class="line"> 11            partition P_MAX values less than(maxvalue)</span><br><span class="line"> 12  );</span><br><span class="line"></span><br><span class="line">表已创建。</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>partition by</td>
+<td>指明是分区表,range确定分区方式,join_date是分区键,必须是表中的一列</td>
+</tr>
+<tr>
+<td>partition</td>
+<td>后跟分区名字,分区名字必须全库唯一,不能重复</td>
+</tr>
+<tr>
+<td>values less than</td>
+<td>即当分区键的值小于其后的值时,数据落入本分区</td>
+</tr>
+<tr>
+<td>maxvalue</td>
+<td>用于最大分区</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>当插入数据的join_date时间日期小于20日,放入p1分区<br>当时间日期大于22放入P_MAX</p>
+</blockquote>
+<h4 id="list分区范例"><a href="#list分区范例" class="headerlink" title="list分区范例"></a>list分区范例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create table LIST_TAB_TEST</span><br><span class="line">  2  (</span><br><span class="line">  3         id_no number(10),</span><br><span class="line">  4         partition_id varchar2(2)</span><br><span class="line">  5  )</span><br><span class="line">  6  partition by list(partition_id)</span><br><span class="line">  7  (</span><br><span class="line">  8            partition P_0 values(&apos;0&apos;),</span><br><span class="line">  9            partition P_1 values(&apos;1&apos;),</span><br><span class="line"> 10            partition P_2 values(&apos;2&apos;),</span><br><span class="line"> 11            partition P_default values(default)</span><br><span class="line"> 12  );</span><br><span class="line"></span><br><span class="line">表已创建。</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>values:</td>
+<td>即值是. 表示当分区键的值是其后的值时,数据落入本分区</td>
+</tr>
+<tr>
+<td>default:</td>
+<td>关键字,默认值,当分区键的值不在之前分区值内时,数据落入本分区</td>
+</tr>
+</tbody></table>
+<h4 id="查询每个分区的数据"><a href="#查询每个分区的数据" class="headerlink" title="查询每个分区的数据"></a>查询每个分区的数据</h4><p>语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from 表名 partition(分区名);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; insert into emp_info</span><br><span class="line">  2  values(1,sysdate);</span><br><span class="line">已创建 1 行。</span><br><span class="line"></span><br><span class="line">SQL&gt; select * from emp_info partition(p3);</span><br><span class="line">    EMP_NO JOIN_DATE</span><br><span class="line">---------- --------------</span><br><span class="line">         1 21-11月-19</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; insert into list_tab_test</span><br><span class="line">  2  values(1,6);</span><br><span class="line">已创建 1 行。</span><br><span class="line"></span><br><span class="line">SQL&gt; select * from list_tab_test partition(P_default);</span><br><span class="line">     ID_NO PART</span><br><span class="line">---------- ----</span><br><span class="line">         1 6</span><br></pre></td></tr></table></figure>
+
+<p>查看分区建<code>select * from dba_part_key_columns where owner=&#39;SCOTT&#39;;</code></p>
+<h2 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; drop table emp_info;</span><br><span class="line">表已删除。</span><br><span class="line"></span><br><span class="line">SQL&gt; drop table list_tab_test;</span><br><span class="line">表已删除。</span><br></pre></td></tr></table></figure>
+
+<h2 id="增加列"><a href="#增加列" class="headerlink" title="增加列"></a>增加列</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; create table student6</span><br><span class="line">  2  (</span><br><span class="line">  3  id number primary key</span><br><span class="line">  4  );</span><br><span class="line"></span><br><span class="line">表已创建。</span><br></pre></td></tr></table></figure>
+
+<p>增加单列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter table student6</span><br><span class="line">  2  add s_mpno number(6);</span><br><span class="line"></span><br><span class="line">表已更改。</span><br></pre></td></tr></table></figure>
+
+<p>增加多列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter table student6</span><br><span class="line">  2  add(s_name varchar2(50),s_deptno number(2));</span><br><span class="line"></span><br><span class="line">表已更改。</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改表列的名称和属性"><a href="#修改表列的名称和属性" class="headerlink" title="修改表列的名称和属性"></a>修改表列的名称和属性</h2><h4 id="修改表名和列名"><a href="#修改表名和列名" class="headerlink" title="修改表名和列名"></a>修改表名和列名</h4><p>修改表名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter table student6 rename to student_6;</span><br><span class="line"></span><br><span class="line">表已更改。</span><br></pre></td></tr></table></figure>
+
+<p>修改列名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter table student_6 rename column id to s_id;</span><br><span class="line"></span><br><span class="line">表已更改。</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改列的属性"><a href="#修改列的属性" class="headerlink" title="修改列的属性"></a>修改列的属性</h4><p>将s_id的number改为number(6)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter table student_6 modify s_id number(6);</span><br><span class="line"></span><br><span class="line">表已更改。</span><br></pre></td></tr></table></figure>
+
+<p>将s_mpno设置为唯一的,s_name设置为非空的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter table student_6</span><br><span class="line">  2  modify(s_mpno number(6) unique,</span><br><span class="line">  3  s_name varchar2(50) not null);</span><br><span class="line"></span><br><span class="line">表已更改。</span><br></pre></td></tr></table></figure>
+
+<h4 id="已有数据情况下-更改列的属性"><a href="#已有数据情况下-更改列的属性" class="headerlink" title="已有数据情况下,更改列的属性"></a>已有数据情况下,更改列的属性</h4><p>将stu_info表的stu_no列属性由number改为varchar2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; select * from stu_info;</span><br><span class="line"></span><br><span class="line">    STU_NO  STU_NAME         STU_AGE</span><br><span class="line">      -------    -------- ---</span><br><span class="line">      1 张三              50</span><br><span class="line">      2 李四              50</span><br><span class="line">      3 王五              51</span><br></pre></td></tr></table></figure>
+
+<h6 id="方法1-将stu-no列清空-然后修改类型-最后数据恢复"><a href="#方法1-将stu-no列清空-然后修改类型-最后数据恢复" class="headerlink" title="方法1,将stu_no列清空,然后修改类型,最后数据恢复"></a>方法1,将stu_no列清空,然后修改类型,最后数据恢复</h6><p>第一步,清空数据,但数据不能丢失</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter table stu_info  add stu_no1 number(20);</span><br><span class="line">表已更改。</span><br><span class="line"></span><br><span class="line">SQL&gt; update stu_info set stu_no1=stu_no;</span><br><span class="line">已更新3行。</span><br><span class="line"></span><br><span class="line">SQL&gt; update stu_info set stu_no=null;</span><br><span class="line">已更新3行。</span><br><span class="line"></span><br><span class="line">SQL&gt; commit;</span><br><span class="line">提交完成。</span><br><span class="line"></span><br><span class="line">SQL&gt; select * from stu_info;</span><br><span class="line"></span><br><span class="line">    STU_NO   STU_NAME   STU_AGE        STU_NO1</span><br><span class="line">---------- -------------- -------------- ----------</span><br><span class="line">             张三     50               1</span><br><span class="line">             李四     50               2</span><br><span class="line">             王五     51               3</span><br></pre></td></tr></table></figure>
+
+<p>第二步,修改类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter table stu_info modify stu_no varchar(10);</span><br><span class="line"></span><br><span class="line">表已更改。</span><br></pre></td></tr></table></figure>
+
+<p>第三步,将数据恢复,并将新增列删除</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; update stu_info set stu_no=stu_no1;</span><br><span class="line">已更新3行。</span><br><span class="line"></span><br><span class="line">SQL&gt; alter table stu_info drop column stu_no1;</span><br><span class="line">表已更改。</span><br></pre></td></tr></table></figure>
+
+<h2 id="删除列"><a href="#删除列" class="headerlink" title="删除列"></a>删除列</h2><p>删除单列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter table stu_info drop column stu_no;</span><br><span class="line"></span><br><span class="line">表已更改。</span><br></pre></td></tr></table></figure>
+
+<p>删除多列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SQL&gt; alter table student_6 drop(s_mpno,s_deptno);</span><br><span class="line"></span><br><span class="line">表已更改。</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.png" alt="sunlizhao 微信">
+        <p>微信</p>
+      </div>
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/alipay.png" alt="sunlizhao 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/oracle表管理/" rel="tag"># oracle表管理</a>
+          
+            <a href="/tags/oracle列管理/" rel="tag"># oracle列管理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/19/oracle学习5-插入,更新,删除数据/" rel="next" title="oracle学习5-插入,更新,删除数据">
+                <i class="fa fa-chevron-left"></i> oracle学习5-插入,更新,删除数据
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="sunlizhao">
+            
+              <p class="site-author-name" itemprop="name">sunlizhao</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">23</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.baidu.com/" title="百度 &rarr; https://www.baidu.com/" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>百度</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.cnblogs.com/inmeditation/" title="博客园 &rarr; https://www.cnblogs.com/inmeditation/"><i class="fa fa-fw fa-globe"></i>博客园</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.csdn.net/" title="CSDN &rarr; https://www.csdn.net/" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.minisnake.cn/" title="李鑫snake &rarr; https://www.minisnake.cn/" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>李鑫snake</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://www.hejingxu.cn" title="尒小哴 &rarr; https://www.hejingxu.cn" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>尒小哴</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://clearseve.com/" title="秦大哥 &rarr; https://clearseve.com/" rel="noopener" target="_blank"><i class="fa fa-fw fa-globe"></i>秦大哥</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据类型"><span class="nav-number">1.</span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串类型"><span class="nav-number">1.1.</span> <span class="nav-text">字符串类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数值类型"><span class="nav-number">1.2.</span> <span class="nav-text">数值类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#日期和时间类型"><span class="nav-number">1.3.</span> <span class="nav-text">日期和时间类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#表管理"><span class="nav-number">2.</span> <span class="nav-text">表管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#新建表"><span class="nav-number">2.1.</span> <span class="nav-text">新建表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#添加注释"><span class="nav-number">2.1.0.1.</span> <span class="nav-text">添加注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复制表"><span class="nav-number">2.1.0.2.</span> <span class="nav-text">复制表</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#复制表结构-不包含数据"><span class="nav-number">2.1.0.2.0.1.</span> <span class="nav-text">复制表结构,不包含数据</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#复制表结构-包含数据"><span class="nav-number">2.1.0.2.0.2.</span> <span class="nav-text">复制表结构,包含数据</span></a></li></ol></li></ol></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#新建分区表"><span class="nav-number">2.2.</span> <span class="nav-text">新建分区表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#range分区范例"><span class="nav-number">2.2.0.1.</span> <span class="nav-text">range分区范例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#list分区范例"><span class="nav-number">2.2.0.2.</span> <span class="nav-text">list分区范例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询每个分区的数据"><span class="nav-number">2.2.0.3.</span> <span class="nav-text">查询每个分区的数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除表"><span class="nav-number">2.3.</span> <span class="nav-text">删除表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增加列"><span class="nav-number">2.4.</span> <span class="nav-text">增加列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改表列的名称和属性"><span class="nav-number">2.5.</span> <span class="nav-text">修改表列的名称和属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#修改表名和列名"><span class="nav-number">2.5.0.1.</span> <span class="nav-text">修改表名和列名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改列的属性"><span class="nav-number">2.5.0.2.</span> <span class="nav-text">修改列的属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#已有数据情况下-更改列的属性"><span class="nav-number">2.5.0.3.</span> <span class="nav-text">已有数据情况下,更改列的属性</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#方法1-将stu-no列清空-然后修改类型-最后数据恢复"><span class="nav-number">2.5.0.3.0.1.</span> <span class="nav-text">方法1,将stu_no列清空,然后修改类型,最后数据恢复</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除列"><span class="nav-number">2.6.</span> <span class="nav-text">删除列</span></a></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sunlizhao</span>
+
+  
+
+  
+</div>
+<!--
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+ 
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+   -->
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+
+
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://www.cnblogs.com/inmeditation/2019/11/21/oracle学习6-表结构管理/";
+    this.page.identifier = "2019/11/21/oracle学习6-表结构管理/";
+    this.page.title = 'oracle学习6-表结构管理';
+    };
+  function loadComments() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', '' + +new Date());
+    (d.head || d.body).appendChild(s);
+  }
+  
+    window.addEventListener('load', loadComments, false);
+  
+</script>
+
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
